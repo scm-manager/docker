@@ -1,0 +1,7 @@
+#!/bin/sh
+exec java -cp "/etc/scm:/opt/scm-server/lib/*" \
+  -Dbasedir=/opt/scm-server \
+  -Djava.awt.headless=true \
+  -Dlogback.configurationFile=logging.xml \
+  $JAVA_OPTS $* \
+  sonia.scm.server.ScmServerDaemon
