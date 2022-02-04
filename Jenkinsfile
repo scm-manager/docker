@@ -24,7 +24,7 @@ pipeline {
     stage('Environment') {
       steps {
         script {
-          commit_sha = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
+          commit_sha = sh(returnStdout: true, script: 'git rev-parse HEAD')
         }
       }
     }
