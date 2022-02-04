@@ -22,7 +22,7 @@ else
 fi
 
 # build and push
-docker buildx bake \
+docker buildx build \
   --builder ${BUILDER} \
   --platform "${PLATFORM}" \
   --build-arg "VERSION=${VERSION}" \
