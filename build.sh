@@ -6,7 +6,7 @@ IMAGE="scmmanager/scm-multiarch-test"
 VERSION="$1"
 COMMIT_SHA="${2:-unknown}"
 
-QEMU_PLATFORM="arm,arm64,amd64"
+QEMU_PLATFORM="arm,arm64"
 PLATFORM="linux/arm/v7,linux/arm64/v8,linux/amd64"
 
 BUILDER=scm-builder
