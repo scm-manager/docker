@@ -24,6 +24,9 @@ pipeline {
     stage('Environment') {
       steps {
         script {
+          if (params.version == null) {
+            error("Version parameter is required")
+          }
           commit_sha = sh(returnStdout: true, script: 'git rev-parse HEAD')
         }
       }
