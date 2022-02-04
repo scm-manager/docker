@@ -71,7 +71,8 @@ ENV CACHE_DIR /var/cache/scm/work
 ENV JAVA_HOME /opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 
-COPY . /
+COPY etc /etc
+COPY opt /opt
 COPY --from=jre-build /javaruntime "${JAVA_HOME}"
 COPY --from=scm-downloader /scm-server/lib /opt/scm-server/lib
 COPY --from=scm-downloader /scm-server/var /opt/scm-server/var
