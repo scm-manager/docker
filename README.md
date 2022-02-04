@@ -30,3 +30,12 @@ In order to archive the goal of an multi-platform images we had to change some t
 * Move from adoptjdk to temurin, because temurin replaces the adoptjdk
 * Move from an alpine base to debian bullseye slim, because adoptjdk/temurin does not provide alpine arm images
 * Use jlink to create a minimal java edition. The switch from alpine to debian increased the image size. With the usage of jlink we are creating now smaller images as with alpine.
+
+## Resources
+
+Here are some links to learn about building multiplatform images
+
+* https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
+* https://github.com/docker/buildx#building-multi-platform-images
+* https://docs.docker.com/buildx/working-with-buildx/
+* https://hub.docker.com/r/tonistiigi/binfmt
