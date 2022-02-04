@@ -24,15 +24,15 @@ pipeline {
     stage('Environment') {
       steps {
         script {
-          if (params.version == null) {
-            error("Version parameter is required")
-          }
           commit_sha = sh(returnStdout: true, script: 'git rev-parse HEAD')
         }
       }
     }
 
     stage('Build') {
+      when {
+        expression { params.version != null && !params.version.isEmpty() }
+      }
       steps {
         echo "build image ${params.version} from ${commit_sha}"
         script {
