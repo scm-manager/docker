@@ -71,6 +71,8 @@ ENV CACHE_DIR /var/cache/scm/work
 ENV JAVA_HOME /opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 
+ARG COMMIT_SHA=unknown
+
 COPY etc /etc
 COPY opt /opt
 COPY --from=jre-build /javaruntime "${JAVA_HOME}"
@@ -96,14 +98,15 @@ RUN set -x \
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:8080/scm/api/v2 || exit 1
 
+# set opencontainer labels
 LABEL \
-    org.opencontainers.image.vendor="Cloudogu GmbH" \
-    org.opencontainers.image.title="Official SCM-Manager image" \
-    org.opencontainers.image.description="The easiest way to share and manage your Git, Mercurial and Subversion repositories" \
-    org.opencontainers.image.version="${VERSION}" \
-    org.opencontainers.image.url="https://scm-manager.org/" \
-    org.opencontainers.image.source="https://github.com/scm-manager/docker" \
-    # org.opencontainers.image.revision="${COMMIT_SHA}" \
-    org.opencontainers.image.licenses="MIT"
+  org.opencontainers.image.vendor="Cloudogu GmbH" \
+  org.opencontainers.image.title="Official SCM-Manager image" \
+  org.opencontainers.image.description="The easiest way to share and manage your Git, Mercurial and Subversion repositories" \
+  org.opencontainers.image.version="${VERSION}" \
+  org.opencontainers.image.url="https://scm-manager.org/" \
+  org.opencontainers.image.source="https://github.com/scm-manager/docker" \
+  org.opencontainers.image.revision="${COMMIT_SHA}" \
+  org.opencontainers.image.licenses="MIT"
 
 ENTRYPOINT [ "/opt/scm-server/bin/scm-server" ]

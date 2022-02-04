@@ -3,7 +3,8 @@ set -euo pipefail
 IFS=$'\n\t'
 
 IMAGE="scmmanager/scm-multiarch-test"
-VERSION="2.30.1"
+VERSION="$1"
+COMMIT_SHA="${2:-unknown}"
 
 QEMU_PLATFORM="arm,arm64,amd64"
 PLATFORM="linux/arm/v7,linux/arm64/v8,linux/amd64"
@@ -25,5 +26,6 @@ docker buildx bake \
   --builder ${BUILDER} \
   --platform "${PLATFORM}" \
   --build-arg "VERSION=${VERSION}" \
+  --build-arg "COMMIT_SHA=${COMMIT_SHA}" \
   -t "${IMAGE}:${VERSION}" \
   --push .

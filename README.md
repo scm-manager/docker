@@ -1,6 +1,6 @@
-# SCM-Manager multi-platform docker images 
+# SCM-Manager Docker
 
-This project aims to create multi-platform docker images of SCM-Manager.
+This project aims to create multi-platform docker images for SCM-Manager.
 The goal of the project is it to create the following platforms on our ci infrastructure:
 
 * linux/amd64
