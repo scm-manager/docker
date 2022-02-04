@@ -71,6 +71,7 @@ ENV CACHE_DIR /var/cache/scm/work
 ENV JAVA_HOME /opt/java/openjdk
 ENV PATH "${JAVA_HOME}/bin:${PATH}"
 
+ARG VERSION
 ARG COMMIT_SHA=unknown
 
 COPY etc /etc
