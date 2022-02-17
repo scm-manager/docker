@@ -27,8 +27,7 @@ docker run -p 8080:8080 scmmanager/scm-multiarch-test:2.30.1
 In order to archive the goal of an multi-platform images we had to change some things.
 
 * Create separate build with separate repo. The gradle plugin which is used to build the docker images does not support buildx, so it seems easier to separate the build.
-* Move from adoptjdk to temurin, because temurin replaces the adoptjdk
-* Move from an alpine base to debian bullseye slim, because adoptjdk/temurin does not provide alpine arm images
+* Move from adoptjdk to openjdk, because adoptjdk/temurin does not provide alpine arm images ([#141](https://github.com/adoptium/containers/issues/141) and [#158](https://github.com/adoptium/containers/issues/158))
 * Use jlink to create a minimal java edition. The switch from alpine to debian increased the image size. With the usage of jlink we are creating now smaller images as with alpine.
 
 ## Resources

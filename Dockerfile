@@ -23,18 +23,20 @@
 #
 
 # Create minimal java version
-FROM eclipse-temurin:11.0.14_9-jdk-focal as jre-build
+FROM alpine:3.15.0 as jre-build
 
-RUN jlink \
- --add-modules ALL-MODULE-PATH \
- --strip-debug \
- --no-man-pages \
- --no-header-files \
- --compress=2 \
- --output /javaruntime
+RUN set -x \
+ && apk add --no-cache openjdk11-jdk openjdk11-jmods \
+ && jlink \
+    --add-modules ALL-MODULE-PATH \
+    --strip-debug \
+    --no-man-pages \
+    --no-header-files \
+    --compress=2 \
+    --output /javaruntime
 
 # Download and verify scm-manager package
-FROM debian:bullseye-20220125-slim as scm-downloader
+FROM alpine:3.15.0 as scm-downloader
 
 ARG VERSION
 
@@ -43,8 +45,7 @@ RUN test -n "${VERSION}"
 
 # install required tools
 RUN set -x \
- && apt-get update \
- && apt-get install -y gpg curl gnupg2
+ && apk add --no-cache gpg gpg-agent curl
 
 # download
 RUN GPG_KEY="https://packages.scm-manager.org/repository/keys/gpg/oss-cloudogu-com.pub" \
@@ -64,7 +65,7 @@ RUN tar xvfz /tmp/scm-server.tar.gz
 # ---
 
 # SCM-Manager runtime
-FROM debian:bullseye-20220125-slim as runtime
+FROM alpine:3.15.0 as runtime
 
 ENV SCM_HOME /var/lib/scm
 ENV CACHE_DIR /var/cache/scm/work
@@ -81,18 +82,20 @@ COPY --from=scm-downloader /scm-server/lib /opt/scm-server/lib
 COPY --from=scm-downloader /scm-server/var /opt/scm-server/var
 
 RUN set -x \
+ # ttf-dejavu graphviz are required for the plantuml plugin
+ && apk add --no-cache ttf-dejavu graphviz mercurial bash ca-certificates \
+ && adduser -S -s /bin/false -h ${SCM_HOME} -D -H -u 1000 -G root scm \
  && mkdir -p ${SCM_HOME} ${CACHE_DIR} \
  && chmod +x /opt/scm-server/bin/scm-server \
- && apt-get update \
- # libfreetype6 libfontconfig1 graphviz
- && apt-get install -y --no-install-recommends libfreetype6 libfontconfig1 graphviz mercurial bash ca-certificates \
- # use gid 0 for openshift compatibility
- && useradd -d "${SCM_HOME}" -u 1000 -g 0 -m -s /bin/bash scm \
  # set permissions to group 0 for openshift compatibility
  && chown 1000:0 ${SCM_HOME} ${CACHE_DIR} \
- && chmod -R g=u ${SCM_HOME} ${CACHE_DIR} \
- # cleanup apt cache
- && rm -rf /var/lib/apt/lists/*
+ && chmod -R g=u ${SCM_HOME} ${CACHE_DIR}
+
+USER 1000
+
+WORKDIR "/opt/scm-server"
+VOLUME ["${SCM_HOME}", "${CACHE_DIR}"]
+EXPOSE 8080
 
 # we us a high relative high start period,
 # because the start time depends on the number of installed plugins
