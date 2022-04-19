@@ -23,7 +23,7 @@
 #
 
 # Create minimal java version
-FROM debian:11.3 as jre-build
+FROM debian:11.3-slim as jre-build
 
 RUN set -x \
  && apt-get update \
@@ -37,7 +37,7 @@ RUN set -x \
     --output /javaruntime
 
 # Download and verify scm-manager package
-FROM debian:11.3 as scm-downloader
+FROM debian:11.3-slim as scm-downloader
 
 ARG VERSION
 
@@ -67,7 +67,7 @@ RUN tar xvfz /tmp/scm-server.tar.gz
 # ---
 
 # SCM-Manager runtime
-FROM debian:11.3 as runtime
+FROM debian:11.3-slim as runtime
 
 ENV SCM_HOME /var/lib/scm
 ENV CACHE_DIR /var/cache/scm/work
