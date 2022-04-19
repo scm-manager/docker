@@ -20,7 +20,6 @@ pipeline {
   }  
 
   stages {
-
     stage('Environment') {
       steps {
         script {

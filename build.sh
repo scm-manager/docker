@@ -4,6 +4,7 @@ IFS=$'\n\t'
 
 export VERSION="$1"
 export COMMIT_SHA="${2:-unknown}"
+shift 2
 
 QEMU_PLATFORM="arm,arm64"
 PLATFORM="linux/arm/v7,linux/arm64/v8,linux/amd64"
@@ -24,4 +25,4 @@ fi
 docker buildx bake \
   --builder ${BUILDER} \
   -f docker-bake.hcl \
-  --push
+  --push $@
