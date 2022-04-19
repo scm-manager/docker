@@ -17,13 +17,27 @@ variable "IMAGE" {
   default = "scmmanager/scm-multiarch-test"
 }
 
-target "alpine" {
-  dockerfile = "Dockerfile.alpine"
+target "base" {
   context = "."
   args = {
     VERSION = VERSION
     COMMIT_SHA = COMMIT_SHA
   }
+  labels = {
+    "org.opencontainers.image.vendor" = "Cloudogu GmbH"
+    "org.opencontainers.image.title" = "Official SCM-Manager image"
+    "org.opencontainers.image.description" = "The easiest way to share and manage your Git, Mercurial and Subversion repositories"
+    "org.opencontainers.image.url" = "https://scm-manager.org/"
+    "org.opencontainers.image.source" = "https://github.com/scm-manager/docker"
+    "org.opencontainers.image.licenses" = "MIT"
+    "org.opencontainers.image.version" = VERSION
+    "org.opencontainers.image.revision" = COMMIT_SHA
+  }
+}
+
+target "alpine" {
+  inherits = ["base"]
+  dockerfile = "Dockerfile.alpine"
   tags = [
     "${IMAGE}:${VERSION}",
     "${IMAGE}:${VERSION}-alpine"
@@ -32,12 +46,8 @@ target "alpine" {
 }
 
 target "debian" {
+  inherits = ["base"]
   dockerfile = "Dockerfile.debian"
-  context = "."
-  args = {
-    VERSION = VERSION,
-    COMMIT_SHA = COMMIT_SHA
-  }
   tags = [
     "${IMAGE}:${VERSION}-debian"
   ]
