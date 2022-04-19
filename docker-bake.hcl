@@ -39,7 +39,7 @@ target "debian" {
     COMMIT_SHA = COMMIT_SHA
   }
   tags = [
-    "${IMAGE}-debian:${VERSION}-debian"
+    "${IMAGE}:${VERSION}-debian"
   ]
   platforms = ["linux/amd64", "linux/arm64/v8", "linux/arm/v7"]
 }
