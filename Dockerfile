@@ -23,11 +23,9 @@
 #
 
 # Create minimal java version
-FROM alpine:3.15.0 as jre-build
+FROM bellsoft/liberica-openjdk-alpine:11 as jre-build
 
-RUN set -x \
- && apk add --no-cache openjdk11-jdk openjdk11-jmods \
- && jlink \
+RUN jlink \
     --add-modules ALL-MODULE-PATH \
     --strip-debug \
     --no-man-pages \
@@ -36,7 +34,7 @@ RUN set -x \
     --output /javaruntime
 
 # Download and verify scm-manager package
-FROM alpine:3.15.0 as scm-downloader
+FROM alpine:3.15.4 as scm-downloader
 
 ARG VERSION
 
@@ -65,7 +63,7 @@ RUN tar xvfz /tmp/scm-server.tar.gz
 # ---
 
 # SCM-Manager runtime
-FROM alpine:3.15.0 as runtime
+FROM alpine:3.15.4 as runtime
 
 ENV SCM_HOME /var/lib/scm
 ENV CACHE_DIR /var/cache/scm/work
